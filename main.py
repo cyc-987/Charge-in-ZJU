@@ -1,6 +1,7 @@
 from time import time
 from fetch import Fetcher
 from push import DingBot
+from datetime import datetime, timezone, timedelta
 import time
 import urllib.parse
 import argparse
@@ -18,9 +19,9 @@ def main(url):
     fetcher = Fetcher(openId)
 
     while running_status:
-        current_time = time.time()
-        current_time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(current_time))
-        print(f"Fetch time: {current_time}")
+        tz_utc_8 = timezone(timedelta(hours=8))
+        current_time = datetime.now(tz_utc_8).strftime("%Y-%m-%d %H:%M:%S")
+        print(f"Fetch time: {current_time}")        
         result = fetcher.full_fetch()
         
         if result == -1:

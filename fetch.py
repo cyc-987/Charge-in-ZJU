@@ -28,7 +28,9 @@ class Fetcher:
         except requests.exceptions.JSONDecodeError:
             # the response is not valid JSON
             return -2
-        if json_data["success"] != True:
+        
+        # Check if the response contains the expected structure
+        if "success" not in json_data or json_data["success"] != True:
             return -1
         return json_data
 
@@ -44,7 +46,7 @@ class Fetcher:
             for site in data.get("sites_yq", []): # 遍历每个站点组
                 # 获取站点基本信息
                 site_total = 0
-                site_avalaible = 0
+                site_available = 0
                 site_used = 0
                 site_error = 0
                 site_name = site["group_sim_name"]
@@ -72,27 +74,31 @@ class Fetcher:
                             self.status = False
                             break
                     # 解析结果
+                    found_match = False
                     for item in result.get("obj", []):
                         # 寻找匹配项
-                        while item["devaddress"] != devaddress:
-                            continue
-                        # 找到匹配项
-                        # print(item)
-                        portstatus = item["portstatus"]
-                        if portstatus:
-                            site_avalaible += portstatus.count("0")
-                            site_used += portstatus.count("1")
-                            site_error += portstatus.count("3")
-                            site_total += len(portstatus)
-                        else:
-                            print(f"Port status is None for {devaddress}")
-                        break
+                        if item.get("devaddress") == devaddress:
+                            # 找到匹配项
+                            # print(item)
+                            portstatus = item.get("portstatus")
+                            if portstatus:
+                                site_available += portstatus.count("0")
+                                site_used += portstatus.count("1")
+                                site_error += portstatus.count("3")
+                                site_total += len(portstatus)
+                            else:
+                                print(f"Port status is None for {devaddress}")
+                            found_match = True
+                            break
+                    
+                    if not found_match:
+                        print(f"No matching device found for {devaddress}")
                 # 封装站点组信息为json
-                print(f"Site {site_name} - Total: {site_total}, Available: {site_avalaible}, Used: {site_used}, Error: {site_error}")
+                print(f"Site {site_name} - Total: {site_total}, Available: {site_available}, Used: {site_used}, Error: {site_error}")
                 site_info = {
                     "site_name": site_name,
                     "site_total": site_total,
-                    "site_avalaible": site_avalaible,
+                    "site_available": site_available,
                     "site_used": site_used,
                     "site_error": site_error
                 }

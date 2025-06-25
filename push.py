@@ -14,8 +14,8 @@ class DingBot:
         # Prepare the message
         message = f"> 抓取时间 - {time}\n"
         for site in json_content:
-            message += f"##### **{site['site_name']}**-----\n"
-            message += f"**{site['site_avalaible']}**可用/"
+            message += f"##### **{site['site_name']}**\n"
+            message += f"**{site['site_available']}**可用/"
             message += f"**{site['site_used']}**已用/"
             message += f"**{site['site_error']}**错误/"
             message += f"**{site['site_total']}**总端口\n\n"
