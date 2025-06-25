@@ -22,6 +22,11 @@ def main(url):
         tz_utc_8 = timezone(timedelta(hours=8))
         current_time = datetime.now(tz_utc_8).strftime("%Y-%m-%d %H:%M:%S")
         print(f"Fetch time: {current_time}")        
+        current_hour = datetime.now(tz_utc_8).hour
+        if 0 <= current_hour < 6:
+            print("Night time (00:00-06:00), skipping fetch...")
+            time.sleep(600)
+            continue
         result = fetcher.full_fetch()
         
         if result == -1:
