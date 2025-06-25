@@ -22,7 +22,20 @@ class Fetcher:
         }
         
     def fetch(self, params):
-        response = requests.post(self.api_address, headers=self.headers, data=params)
+        max_retries = 5
+        for attempt in range(max_retries):
+            try:
+                response = requests.post(self.api_address, headers=self.headers, data=params, timeout=3)
+                break
+            except requests.exceptions.Timeout:
+                if attempt == max_retries - 1:
+                    return -2
+                continue
+            except requests.exceptions.RequestException:
+                if attempt == max_retries - 1:
+                    return -2
+                continue
+        
         try:
             json_data = response.json()
         except requests.exceptions.JSONDecodeError:
