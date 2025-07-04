@@ -27,8 +27,9 @@ class DingBot:
     def send_error_message(self, time):
         # Prepare the error message
         message = f"抓取时间 - {time}\n"
-        message += f"openId已过期\n"
-        message += "群主来修一下"
+        message += f"查询API返回异常\n"
+        message += "等待十分钟后自动重试\n"
+        message += "通知群主"
         # Send the error message
         self.bot.send_text(msg=message, at_mobiles=["群主手机号"])
         print("Error message sent successfully.")

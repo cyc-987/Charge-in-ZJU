@@ -32,7 +32,8 @@ def main(url):
         if result == -1:
             running_status = False
             bot.send_error_message(current_time)
-            break
+            time.sleep(600)  # Add a delay of 600 seconds before retrying
+            continue
         bot.send_status_message(current_time, result)
         print("waiting...")
         time.sleep(60)  # Add a delay of 60 seconds between requests
