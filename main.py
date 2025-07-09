@@ -33,6 +33,7 @@ def main(url):
             running_status = False
             bot.send_error_message(current_time)
             time.sleep(600)  # Add a delay of 600 seconds before retrying
+            fetcher.status = True  # Reset status for the next attempt
             continue
         bot.send_status_message(current_time, result)
         print("waiting...")
