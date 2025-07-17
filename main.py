@@ -8,7 +8,6 @@ import argparse
 
 def main(url):
     openId = ""
-    running_status = True
     
     parsed_url = urllib.parse.urlparse(url)
     query_params = urllib.parse.parse_qs(parsed_url.query)
@@ -18,7 +17,7 @@ def main(url):
 
     fetcher = Fetcher(openId)
 
-    while running_status:
+    while True:
         tz_utc_8 = timezone(timedelta(hours=8))
         current_time = datetime.now(tz_utc_8).strftime("%Y-%m-%d %H:%M:%S")
         print(f"Fetch time: {current_time}")        
@@ -30,7 +29,6 @@ def main(url):
         result = fetcher.full_fetch()
         
         if result == -1:
-            running_status = False
             bot.send_error_message(current_time)
             time.sleep(600)  # Add a delay of 600 seconds before retrying
             fetcher.status = True  # Reset status for the next attempt
