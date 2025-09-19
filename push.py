@@ -21,7 +21,11 @@ class DingBot:
             message += f"**{site['site_total']}**总端口\n\n"
         message += "> 有未收录站点请发送邮箱至 <群主邮箱>\n"
         # Send the message
-        self.bot.send_markdown(title="站点状态更新", text=message)
+        try:
+            self.bot.send_markdown(title="站点状态更新", text=message)
+        except Exception as e:
+            print(f"Failed to send message: {e}")
+            return
         print("Message sent successfully.")
 
     def send_error_message(self, time):
@@ -31,5 +35,9 @@ class DingBot:
         message += "等待十分钟后自动重试\n"
         message += "通知群主"
         # Send the error message
-        self.bot.send_text(msg=message, at_mobiles=["群主手机号"])
+        try:
+            self.bot.send_text(msg=message, at_mobiles=["群主手机号"])
+        except Exception as e:
+            print(f"Failed to send error message: {e}")
+            return
         print("Error message sent successfully.")
